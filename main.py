@@ -176,7 +176,7 @@ root.maxsize(1050, 650)
 with open('menu_config_lang_ru.json', 'r', encoding = 'utf-8') as file:
     lang = load(file)
 root.title(lang['Title'])
-set_appearance_mode("dark")
+set_appearance_mode("light")
 set_default_color_theme("yellow-black.json") 
 #------------------------Main entries units------------------------#
 currencies = lang['Currencies']
