@@ -55,10 +55,13 @@ def Execute():
         period = Change_Period(period_units_default.get(), period)
         rate = Change_Type_Rate(rate_per_units_default.get(), rate)
         if(var_type_payment.get() == 'аннуитетный'):
-            monthly_payment, total_payment, overpayment = Annuity.Is_Annuity_Monthly_Payment_Execute(amount, period, rate)
+            monthly_payment, total_payment, overpayment = Annuity.Is_Annuity_Monthly_Payment_Execute(amount, period, rate, float(additional_entries_values[0].get()), float(additional_entries_values[1].get()), float(additional_entries_values[2].get()))
         else:
             monthly_payment, total_payment, overpayment = Differentiated.Is_Differentiated_Monthly_Payment_Execute(amount, period, rate)
-        result_labels_values[0].configure(text=str(round(monthly_payment,2)))
+        try:
+            result_labels_values[0].configure(text=str(round(monthly_payment,2)))
+        except TypeError:
+            result_labels_values[0].configure(text=monthly_payment)
         result_labels_values[1].configure(text=str(round(total_payment,2)))
         result_labels_values[2].configure(text=str(round(overpayment,2)))
         create_new_tab_window()
@@ -148,7 +151,7 @@ def Create_Additional_Parameters():
     # Фрейм, массив энтрей, массив слайдеров
     add_entries, add_entries_values, add_sliders = Create_Main_Entries_Frame(lang["LabelsForAdditionalEntries"], [[add_parametrs_combo.get(),'% от суммы кредита'], [add_parametrs_combo.get(),'% от суммы кредита'], [add_parametrs_combo.get(),'% от суммы кредита']], [add_parametrs_combo, add_parametrs_combo, add_parametrs_combo], frame, 10, 170, 100, [100000, 30000, 30000])
     add_entries.grid(column = 0, row = 1, columnspan = 2)
-    return frame 
+    return frame, add_entries_values
 
 def Create_Result_Labels(*labels_texts):
     frame = CTkFrame(root, fg_color='transparent')
@@ -176,6 +179,7 @@ root.maxsize(1050, 650)
 with open('menu_config_lang_ru.json', 'r', encoding = 'utf-8') as file:
     lang = load(file)
 root.title(lang['Title'])
+root.iconbitmap(default="ico/usd.ico")
 set_appearance_mode("light")
 set_default_color_theme("yellow-black.json") 
 #------------------------Main entries units------------------------#
@@ -201,7 +205,7 @@ main_entries, main_entries_values, main_sliders = Create_Main_Entries_Frame(lang
 # Фрейм, StringVar radiobutton
 change_type_payment, var_type_payment = Create_Radio_Frame(lang['LabelForTypeDebt'],lang['TypesDebt'][0],lang['TypesDebt'][0],lang['TypesDebt'][1])
 # Фрейм
-additional_entries = Create_Additional_Parameters()
+additional_entries, additional_entries_values = Create_Additional_Parameters()
 # 
 execute_btn = CTkButton(root, text=lang['Buttons']['mainExecute'], command=Execute)
 # Фрейм, лейблы результаты, единицы валюты лейблы

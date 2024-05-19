@@ -12,10 +12,12 @@ class Annuity:
     Is_Annuity_Overpayment_Execute = lambda total_payment, amount: total_payment - amount
 
 
-    def Is_Annuity_Monthly_Payment_Execute(amount, period, rate):
+    def Is_Annuity_Monthly_Payment_Execute(amount, period, rate, down_payment=0, one_time_fee=0, monthly_fee=0):
+        net_amount = amount - down_payment
         annuity_ratio = Annuity.Annuity_Ratio_Calculate(rate, period)
-        monthly_payment = Annuity.Annuity_Monthly_Payment_Calculate(amount,annuity_ratio)
-        total_payment = Annuity.Is_Annuity_Total_Payment_Execute(monthly_payment, period)
+        monthly_payment = Annuity.Annuity_Monthly_Payment_Calculate(net_amount,annuity_ratio)
+        monthly_payment += monthly_fee
+        total_payment = Annuity.Is_Annuity_Total_Payment_Execute(monthly_payment, period) + one_time_fee
         overpayment = Annuity.Is_Annuity_Overpayment_Execute(total_payment, amount)
         return monthly_payment, total_payment, overpayment
 
@@ -23,7 +25,15 @@ class Annuity:
 class Differentiated:
 
     def Is_Differentiated_Monthly_Payment_Execute(amount, period, rate):
-        monthly_payment = 0
-        total_payment = 0
-        overpayment = 0
-        return monthly_payment, total_payment, overpayment
+        principal_payment = amount / period
+        monthly_payments = []
+        for m in range(1, int(period) + 1):
+            interest_payment = amount * (1 - (m - 1) / period) * rate
+            monthly_payment = principal_payment + interest_payment
+            monthly_payments.append(monthly_payment)
+        first_month_payment = monthly_payments[0]
+        last_month_payment = monthly_payments[-1]
+        total_payment = sum(monthly_payments)
+        overpayment = total_payment - amount
+        monthly_payment_str = f"от {first_month_payment:.2f} до {last_month_payment:.2f}"
+        return monthly_payment_str, total_payment, overpayment
