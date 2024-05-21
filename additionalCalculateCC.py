@@ -24,16 +24,17 @@ class Annuity:
 
 class Differentiated:
 
-    def Is_Differentiated_Monthly_Payment_Execute(amount, period, rate):
-        principal_payment = amount / period
+    def Is_Differentiated_Monthly_Payment_Execute(amount, period, rate, down_payment=0, one_time_fee=0, monthly_fee=0):
+        net_amount = amount - down_payment
+        principal_payment = net_amount / period
         monthly_payments = []
         for m in range(1, int(period) + 1):
-            interest_payment = amount * (1 - (m - 1) / period) * rate
-            monthly_payment = principal_payment + interest_payment
+            interest_payment = net_amount * (1 - (m - 1) / period) * rate
+            monthly_payment = principal_payment + interest_payment + monthly_fee
             monthly_payments.append(monthly_payment)
         first_month_payment = monthly_payments[0]
         last_month_payment = monthly_payments[-1]
-        total_payment = sum(monthly_payments)
+        total_payment = sum(monthly_payments) + one_time_fee
         overpayment = total_payment - amount
         monthly_payment_str = f"от {first_month_payment:.2f} до {last_month_payment:.2f}"
         return monthly_payment_str, total_payment, overpayment

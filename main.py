@@ -57,7 +57,7 @@ def Execute():
         if(var_type_payment.get() == 'аннуитетный'):
             monthly_payment, total_payment, overpayment = Annuity.Is_Annuity_Monthly_Payment_Execute(amount, period, rate, float(additional_entries_values[0].get()), float(additional_entries_values[1].get()), float(additional_entries_values[2].get()))
         else:
-            monthly_payment, total_payment, overpayment = Differentiated.Is_Differentiated_Monthly_Payment_Execute(amount, period, rate)
+            monthly_payment, total_payment, overpayment = Differentiated.Is_Differentiated_Monthly_Payment_Execute(amount, period, rate, float(additional_entries_values[0].get()), float(additional_entries_values[1].get()), float(additional_entries_values[2].get()))
         try:
             result_labels_values[0].configure(text=str(round(monthly_payment,2)))
         except TypeError:
