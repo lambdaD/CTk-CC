@@ -217,7 +217,7 @@ main_entries.grid(row = 0, column = 0, sticky = "nsew", padx = (15,0), pady = 10
 change_type_payment.grid(row = 1, column = 0, sticky = "nsew", padx = (15,0), pady = 10)
 additional_entries.grid(row = 2, column = 0, sticky = "nsew", padx = (10,0), pady = 10)
 execute_btn.grid(row = 3, column = 0, pady = 10)
-result_labels.grid(row = 4, column = 0, sticky = "nsew", padx = (300,0), pady = 10)
+result_labels.grid(row = 4, column = 0, sticky = "nsew", padx = (10,0), pady = 10)
 #------------------------/------------------------#
 
 
