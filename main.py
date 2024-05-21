@@ -6,7 +6,7 @@ from json import *
 from tkcalendar import DateEntry
 from datetime import *
 from dateutil.relativedelta import relativedelta
-from ttkthemes import ThemedTk
+
 
 from additionalCalculateCC import *
 from tabWindow import * 
@@ -95,6 +95,17 @@ def Create_Menu(lang_header):
     #------------------------/------------------------#
     return header_menu
 
+def format_number(entry_text):
+    # Удаляем все не числовые символы
+    value = entry_text.get().replace(',', '').replace(' ', '')
+    if value.isdigit():
+        formatted_value = '{:,}'.format(int(value)).replace(',', ' ')
+        # Отключаем временно обработку для предотвращения бесконечного цикла
+        entry_text.trace_vdelete("w", entry_text.trace_id)
+        entry_text.set(formatted_value)
+        # Восстанавливаем обработчик
+        entry_text.trace_id = entry_text.trace("w", lambda name, index, mode, sv=entry_text: format_number(sv))
+
 
 def Create_Main_Entries_Frame(labels_texts, units_for_combo, default_units_for_combo, master, padxentry, widthentry, widthcombo, maxSlider):
     frame = CTkFrame(master, fg_color='transparent')
@@ -105,7 +116,9 @@ def Create_Main_Entries_Frame(labels_texts, units_for_combo, default_units_for_c
     countRowsforSlider = 1 
     for i in labels_texts:
         label = CTkLabel(frame, text=i, font = ('Century Gothic', 17))
-        entry = CTkEntry(frame, font = ('Century Gothic', 14), width = widthentry)
+        entry_text = StringVar()
+        entry_text.trace_id = entry_text.trace("w", lambda name, index, mode, sv=entry_text: format_number(sv))
+        entry = CTkEntry(frame, font = ('Century Gothic', 14), width = widthentry, textvariable=entry_text)
         entries.append(entry)
         combo = CTkComboBox(frame, values = units_for_combo[countRows], variable = default_units_for_combo[countRows], width=widthcombo, state='readonly', font = ('Century Gothic', 13))
         slider = CTkSlider(frame, width = 500)
