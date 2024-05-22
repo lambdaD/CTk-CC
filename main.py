@@ -2,7 +2,6 @@ from customtkinter import *
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from json import *
 from tkcalendar import DateEntry
 from datetime import *
 from dateutil.relativedelta import relativedelta
@@ -11,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 from additionalCalculateCC import *
 from tabWindow import * 
 from menu_window import *
+from iflang import *
 
 
 
@@ -77,9 +77,9 @@ def Execute():
         result_labels_values[2].configure(text=str(f'{overpayment:.2f}'))
         result_labels_values[3].configure(text=str(f'{overpayment_percentage:.2f}'))
 
-        create_new_tab_window(payments)
+        create_new_tab_windowSchedulePayments(payments)
     except:
-        messagebox.showinfo(lang['Error Messages']['Value Error']['Title'], lang['Error Messages']['Value Error']['Text'])
+       messagebox.showinfo(lang['Error Messages']['Value Error']['Title'], lang['Error Messages']['Value Error']['Text'])
 
 def calculate_annuity_payments(amount, period, rate, down_payment, monthly_fee, first_payment_date):
     net_amount = amount - down_payment
@@ -237,8 +237,7 @@ root = CTk()
 root.geometry('550x650')
 root.minsize(550, 650)
 root.maxsize(1050, 650)
-with open('menu_config_lang_ru.json', 'r', encoding = 'utf-8') as file:
-    lang = load(file)
+lang = changeLanguage('Ru')
 root.title(lang['Title'])
 root.iconbitmap(default="ico/usd.ico")
 set_appearance_mode("light")
@@ -271,7 +270,7 @@ additional_entries, additional_entries_values, date_entry = Create_Additional_Pa
 execute_btn = CTkButton(root, text=lang['Buttons']['mainExecute'], command=Execute)
 # Фрейм, лейблы результаты, единицы валюты лейблы
 result_labels, result_labels_values, currency_types_labels_values = Create_Result_Labels(lang['MainResults']['monthly_payment'], lang['MainResults']['total_payment'], lang['MainResults']['overpayment'],lang['MainResults']['overpayment_percantage'])
-currency_types_labels_values[3].configure(text = '%',)
+currency_types_labels_values[3].configure(text = '%')
 
 #------------------------Верстка------------------------#
 root.config(menu = header_menu)

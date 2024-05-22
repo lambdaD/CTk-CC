@@ -74,7 +74,8 @@
         "% от суммы кредита"
     ],
     "Buttons":{
-        "mainExecute": "Рассчитать"
+        "mainExecute": "Рассчитать",
+        "SettingBtnSave": "Сохранить"
     },
     "MainResults":{
         "monthly_payment":"Ежемесячный платеж: ",
@@ -109,6 +110,22 @@
             "Title":"Ошибка данных",
             "Text":"Введите корректные данные в поля"
         }
-    }
+    },
+
+    "ScheduleTable":{
+        "Num":"№",
+        "Date":"Дата платежа",
+        "Payment":"Сумма платежа",
+        "Principal":"Основной долг",
+        "Interest":"Проценты",
+        "Balance":"Остаток"
+    },
+    "AppearanceApp":{
+        "Light": "Светлая",
+        "Dark": "Темная",
+        "Bern": "Берн",
+        "Lambda": "Лямбда"
+    },
+    "default_theme": "Светлая"
     
 }
