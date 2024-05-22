@@ -6,7 +6,7 @@ class Calculate:
 
 
 class Annuity:
-    Annuity_Ratio_Calculate = lambda month_rate, period: month_rate/(1-1/((1+month_rate)**period))
+    Annuity_Ratio_Calculate = lambda rate, period: (rate * (1 + rate) ** period) / ((1 + rate) ** period - 1)
     Annuity_Monthly_Payment_Calculate = lambda amount, annuity_ratio: amount*annuity_ratio 
     Is_Annuity_Total_Payment_Execute = lambda monthly_payment, period: monthly_payment * period
     Is_Annuity_Overpayment_Execute = lambda total_payment, amount: total_payment - amount
@@ -15,11 +15,12 @@ class Annuity:
     def Is_Annuity_Monthly_Payment_Execute(amount, period, rate, down_payment=0, one_time_fee=0, monthly_fee=0):
         net_amount = amount - down_payment
         annuity_ratio = Annuity.Annuity_Ratio_Calculate(rate, period)
-        monthly_payment = Annuity.Annuity_Monthly_Payment_Calculate(net_amount,annuity_ratio)
+        monthly_payment = Annuity.Annuity_Monthly_Payment_Calculate(net_amount, annuity_ratio)
         monthly_payment += monthly_fee
         total_payment = Annuity.Is_Annuity_Total_Payment_Execute(monthly_payment, period) + one_time_fee
         overpayment = Annuity.Is_Annuity_Overpayment_Execute(total_payment, amount)
-        return monthly_payment, total_payment, overpayment
+        overpayment_percentage = (overpayment / amount) * 100
+        return monthly_payment, total_payment, overpayment, overpayment_percentage
 
 
 class Differentiated:
@@ -36,5 +37,6 @@ class Differentiated:
         last_month_payment = monthly_payments[-1]
         total_payment = sum(monthly_payments) + one_time_fee
         overpayment = total_payment - amount
+        overpayment_percentage = (overpayment / amount) * 100
         monthly_payment_str = f"от {first_month_payment:.2f} до {last_month_payment:.2f}"
-        return monthly_payment_str, total_payment, overpayment
+        return monthly_payment_str, total_payment, overpayment, overpayment_percentage

@@ -19,7 +19,7 @@ def Change_Currency():
         if(currency_default.get() == cur):
             for cur_lb in currency_types_labels_values:
                 cur_lb.configure(text = cur)
-
+    currency_types_labels_values[3].configure(text = '%')
 
 def Change_Period(period_unit, period):
     if(period_unit == period_units[0]):
@@ -50,25 +50,70 @@ def Slider_Event(value, entry):
 
 def Execute():
     try:
-        amount, period, rate = float(main_entries_values[0].get()), float(main_entries_values[1].get()), float(main_entries_values[2].get())
+        amount = float(get_clean_number(main_entries_values[0].get()))
+        period = float(get_clean_number(main_entries_values[1].get()))
+        rate = float(get_clean_number(main_entries_values[2].get()))
+        down_payment = float(get_clean_number(additional_entries_values[0].get()))
+        one_time_fee = float(get_clean_number(additional_entries_values[1].get()))
+        monthly_fee = float(get_clean_number(additional_entries_values[2].get()))
+        first_payment_date = datetime.strptime(date_entry.get(), "%d.%m.%Y")
+
         Change_Currency()
         period = Change_Period(period_units_default.get(), period)
         rate = Change_Type_Rate(rate_per_units_default.get(), rate)
-        if(var_type_payment.get() == 'аннуитетный'):
-            monthly_payment, total_payment, overpayment = Annuity.Is_Annuity_Monthly_Payment_Execute(amount, period, rate, float(additional_entries_values[0].get()), float(additional_entries_values[1].get()), float(additional_entries_values[2].get()))
+
+        if var_type_payment.get() == lang['TypesDebt'][0]:
+            monthly_payment, total_payment, overpayment, overpayment_percentage = Annuity.Is_Annuity_Monthly_Payment_Execute(amount, period, rate, down_payment, one_time_fee, monthly_fee)
+            payments = calculate_annuity_payments(amount, period, rate, down_payment, monthly_fee, first_payment_date)
         else:
-            monthly_payment, total_payment, overpayment = Differentiated.Is_Differentiated_Monthly_Payment_Execute(amount, period, rate, float(additional_entries_values[0].get()), float(additional_entries_values[1].get()), float(additional_entries_values[2].get()))
+            monthly_payment, total_payment, overpayment, overpayment_percentage = Differentiated.Is_Differentiated_Monthly_Payment_Execute(amount, period, rate, down_payment, one_time_fee, monthly_fee)
+            payments = calculate_differentiated_payments(amount, period, rate, down_payment, monthly_fee, first_payment_date)
+
         try:
-            result_labels_values[0].configure(text=str(round(monthly_payment,2)))
-        except TypeError:
+            result_labels_values[0].configure(text=str(f'{monthly_payment:.2f}'))
+        except:
             result_labels_values[0].configure(text=monthly_payment)
-        result_labels_values[1].configure(text=str(round(total_payment,2)))
-        result_labels_values[2].configure(text=str(round(overpayment,2)))
-        create_new_tab_window()
-    except ValueError:
-        messagebox.showinfo('Ошибка данных',('Введите корректные данные в поля'))
+        result_labels_values[1].configure(text=str(f'{total_payment:.2f}'))
+        result_labels_values[2].configure(text=str(f'{overpayment:.2f}'))
+        result_labels_values[3].configure(text=str(f'{overpayment_percentage:.2f}'))
 
+        create_new_tab_window(payments)
+    except:
+        messagebox.showinfo(lang['Error Messages']['Value Error']['Title'], lang['Error Messages']['Value Error']['Text'])
 
+def calculate_annuity_payments(amount, period, rate, down_payment, monthly_fee, first_payment_date):
+    net_amount = amount - down_payment
+    annuity_ratio = Annuity.Annuity_Ratio_Calculate(rate, period)
+    monthly_payment = Annuity.Annuity_Monthly_Payment_Calculate(net_amount, annuity_ratio)
+    monthly_payment_with_fee = monthly_payment + monthly_fee
+
+    payments = []
+    balance = net_amount
+    for i in range(int(period)):
+        interest_payment = balance * rate
+        principal_payment = monthly_payment - interest_payment
+        balance -= principal_payment
+
+        payment_date = first_payment_date + timedelta(days=i*30)
+        payments.append((i+1, payment_date.strftime("%d.%m.%Y"), round(monthly_payment_with_fee, 2), round(principal_payment, 2), round(interest_payment, 2), round(balance, 2)))
+
+    return payments
+
+def calculate_differentiated_payments(amount, period, rate, down_payment, monthly_fee, first_payment_date):
+    net_amount = amount - down_payment
+    principal_payment = net_amount / period
+
+    payments = []
+    balance = net_amount
+    for i in range(int(period)):
+        interest_payment = balance * rate
+        monthly_payment = principal_payment + interest_payment + monthly_fee
+        balance -= principal_payment
+
+        payment_date = first_payment_date + timedelta(days=i*30)
+        payments.append((i+1, payment_date.strftime("%d.%m.%Y"), round(monthly_payment, 2), round(principal_payment, 2), round(interest_payment, 2), round(balance, 2)))
+
+    return payments
 
 def Create_Menu(lang_header):
     header_menu = Menu()
@@ -106,6 +151,9 @@ def format_number(entry_text):
         # Восстанавливаем обработчик
         entry_text.trace_id = entry_text.trace("w", lambda name, index, mode, sv=entry_text: format_number(sv))
 
+def get_clean_number(entry_text):
+    # Удаляем пробелы из строки и возвращаем число
+    return entry_text.replace(' ', '')
 
 def Create_Main_Entries_Frame(labels_texts, units_for_combo, default_units_for_combo, master, padxentry, widthentry, widthcombo, maxSlider):
     frame = CTkFrame(master, fg_color='transparent')
@@ -130,7 +178,7 @@ def Create_Main_Entries_Frame(labels_texts, units_for_combo, default_units_for_c
         countRows += 1
         count += 2
         countRowsforSlider +=2
-    sliders[0].configure(from_ = 0, to = maxSlider[0], number_of_steps = 100, command = lambda value:  Slider_Event(value, entries[0]))
+    sliders[0].configure(from_ = 0, to = maxSlider[0], number_of_steps = 300, command = lambda value:  Slider_Event(value, entries[0]))
     sliders[0].set(0)
     sliders[1].configure(from_ = 0, to = maxSlider[1], number_of_steps = 100, command = lambda value:  Slider_Event(value, entries[1]))
     sliders[1].set(0)
@@ -164,7 +212,7 @@ def Create_Additional_Parameters():
     # Фрейм, массив энтрей, массив слайдеров
     add_entries, add_entries_values, add_sliders = Create_Main_Entries_Frame(lang["LabelsForAdditionalEntries"], [[add_parametrs_combo.get(),'% от суммы кредита'], [add_parametrs_combo.get(),'% от суммы кредита'], [add_parametrs_combo.get(),'% от суммы кредита']], [add_parametrs_combo, add_parametrs_combo, add_parametrs_combo], frame, 10, 170, 100, [100000, 30000, 30000])
     add_entries.grid(column = 0, row = 1, columnspan = 2)
-    return frame, add_entries_values
+    return frame, add_entries_values, date_entry
 
 def Create_Result_Labels(*labels_texts):
     frame = CTkFrame(root, fg_color='transparent')
@@ -209,7 +257,7 @@ default_units_for_main_entries = [currency_default, period_units_default, rate_p
 # Header
 header_menu = Create_Menu(lang["Header"])
 # Фрейм, Массив полей для ввода
-main_entries, main_entries_values, main_sliders = Create_Main_Entries_Frame(lang["LabelsForMainEntries"], units_for_main_entries, default_units_for_main_entries, root, 100, 170, 100, [500000, 50, 99])
+main_entries, main_entries_values, main_sliders = Create_Main_Entries_Frame(lang["LabelsForMainEntries"], units_for_main_entries, default_units_for_main_entries, root, 100, 170, 100, [5000000, 120, 99])
 
 
 
@@ -218,11 +266,12 @@ main_entries, main_entries_values, main_sliders = Create_Main_Entries_Frame(lang
 # Фрейм, StringVar radiobutton
 change_type_payment, var_type_payment = Create_Radio_Frame(lang['LabelForTypeDebt'],lang['TypesDebt'][0],lang['TypesDebt'][0],lang['TypesDebt'][1])
 # Фрейм
-additional_entries, additional_entries_values = Create_Additional_Parameters()
+additional_entries, additional_entries_values, date_entry = Create_Additional_Parameters()
 # 
 execute_btn = CTkButton(root, text=lang['Buttons']['mainExecute'], command=Execute)
 # Фрейм, лейблы результаты, единицы валюты лейблы
-result_labels, result_labels_values, currency_types_labels_values = Create_Result_Labels(lang['MainResults']['monthly_payment'], lang['MainResults']['total_payment'], lang['MainResults']['overpayment'])
+result_labels, result_labels_values, currency_types_labels_values = Create_Result_Labels(lang['MainResults']['monthly_payment'], lang['MainResults']['total_payment'], lang['MainResults']['overpayment'],lang['MainResults']['overpayment_percantage'])
+currency_types_labels_values[3].configure(text = '%',)
 
 #------------------------Верстка------------------------#
 root.config(menu = header_menu)

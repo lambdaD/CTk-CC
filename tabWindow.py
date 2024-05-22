@@ -2,17 +2,19 @@ from tkinter import *
 from tkinter import ttk
 
 # Функция для создания нового окна
-def create_new_tab_window():
-    new_window = Toplevel()  
-    new_window.title("Расчет")  
-    label = Label(new_window, text="")  
-    label.pack()  
-    tree = ttk.Treeview(new_window, columns=('Count', 'DateTime', 'Amount', 'MainDebt', 'RatioDebt', 'RestDebt'))
-    tree.heading('Count', text='Count')
-    tree.heading('DateTime', text='Count')
-    tree.heading('Amount', text='Count')
-    tree.heading('MainDebt', text='Count')
-    tree.heading('RatioDebt', text='Count')
-    tree.heading('RestDebt', text='Count')
+def create_new_tab_window(payments):
+    window = Toplevel()
+    window.title("Payment Schedule")
 
-    tree.pack()
+    tree = ttk.Treeview(window, columns=('№', 'Date', 'Payment', 'Principal', 'Interest', 'Balance'), show='headings')
+    tree.heading('№', text='№')
+    tree.heading('Date', text='Date')
+    tree.heading('Payment', text='Payment')
+    tree.heading('Principal', text='Principal')
+    tree.heading('Interest', text='Interest')
+    tree.heading('Balance', text='Balance')
+
+    for payment in payments:
+        tree.insert('', 'end', values=payment)
+
+    tree.pack(expand=True, fill='both')
