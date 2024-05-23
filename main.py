@@ -6,12 +6,11 @@ from tkcalendar import DateEntry
 from datetime import *
 from dateutil.relativedelta import relativedelta
 
-
 from additionalCalculateCC import *
 from tabWindow import * 
 from menu_window import *
 from iflang import *
-
+from PIL import Image, ImageTk
 
 
 def Change_Currency():
@@ -234,14 +233,21 @@ def Create_Result_Labels(*labels_texts):
 
 
 root = CTk()
-root.geometry('550x650')
+root.geometry('1050x650')
 root.minsize(550, 650)
 root.maxsize(1050, 650)
 settings = include_settings()
 lang = changeLanguage(settings['language']['user_language'])
 root.title(lang['Title'])
 root.iconbitmap(default="ico/usd.ico")
-Additional.optionmenu_themes_callback('Берн') 
+Additional.optionmenu_themes_callback('Светлая') 
+
+
+
+my_image = CTkImage(light_image=Image.open("img/Lambda.png"), dark_image=Image.open("img/Bern.png"),size=(500, 500))
+image_label = CTkLabel(root, image=my_image, text="")
+image_label.place(relx=1.0, rely=1.0, anchor='se')
+
 #------------------------Main entries units------------------------#
 currencies = lang['Currencies']
 period_units = lang['Period_units']
