@@ -244,9 +244,9 @@ lang = changeLanguage(settings['language']['user_language'])
 root.title(lang['Title'])
 root.iconbitmap(default="ico/usd.ico")
 # Устанавливаем дефолтную тему приложения
-Additional.optionmenu_themes_callback('Светлая') 
-my_image = CTkImage(light_image=Image.open("img/Lambda.png"), dark_image=Image.open("img/Bern.png"),size=(500, 500))
-image_label = CTkLabel(root, image=my_image, text="")
+Additional.optionmenu_themes_callback(settings['default_theme']) 
+image = CTkImage(light_image=Image.open("img/Lambda.png"), dark_image=Image.open("img/Bern.png"),size=(500, 500))
+image_label = CTkLabel(root, image=image, text="")
 image_label.place(relx=1.0, rely=1.0, anchor='se')
 
 #------------------------Единицы измерения------------------------#
