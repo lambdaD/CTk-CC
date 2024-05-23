@@ -6,7 +6,11 @@ def include_settings():
     return settings
 
 def changeLanguage(lang):
-    if lang == 'Ru':
+    if lang == 'Русский':
         with open('lang_ru.json', 'r', encoding = 'utf-8') as file:
             lang = load(file)
+    elif lang == 'English':
+        with open('lang_en.json', 'r', encoding = 'utf-8') as file:
+            lang = load(file)
     return lang
+

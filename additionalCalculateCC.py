@@ -1,3 +1,9 @@
+from iflang import *
+
+
+settings = include_settings()
+lang = changeLanguage(settings['language']['user_language'])
+
 class Calculate:
     ToPercentCalculate = lambda num: num/100
     Year_To_Month_Rate_Calculate = lambda rate: rate/12
@@ -38,5 +44,5 @@ class Differentiated:
         total_payment = sum(monthly_payments) + one_time_fee
         overpayment = total_payment - amount
         overpayment_percentage = (overpayment / amount) * 100
-        monthly_payment_str = f"от {first_month_payment:.2f} до {last_month_payment:.2f}"
+        monthly_payment_str = f"{lang['MainResults']['From']} {first_month_payment:.2f} {lang['MainResults']['To']} {last_month_payment:.2f}"
         return monthly_payment_str, total_payment, overpayment, overpayment_percentage

@@ -1,8 +1,10 @@
 from customtkinter import *
 from iflang import *
 from json import *
+from tkinter import messagebox
 
-lang = changeLanguage('Ru')
+settings = include_settings()
+lang = changeLanguage(settings['language']['user_language'])
 
 isWinOpen = False
 
@@ -55,7 +57,7 @@ def File_Activities_Execute(label):
 
 def Create_Settings_Menu_Window(label):
     if (label == lang['Header']['Edit'][2]) and not isWinOpen:
-        settings = include_settings()
+        
 
         edit_window = CTkToplevel()
         edit_window.title(label)
@@ -64,10 +66,10 @@ def Create_Settings_Menu_Window(label):
         frame_native = CTkFrame(edit_window, fg_color='transparent')
         frame_native.grid(row=0, column=0, padx=10, pady=20)
 
-        label_language = CTkLabel(frame_native, text="Язык:", fg_color="transparent")
+        label_language = CTkLabel(frame_native, text=lang['Settings']['Title Lang'], fg_color="transparent")
         label_language.grid(row=0, column=0)
 
-        label_appearance = CTkLabel(frame_native, text="Тема:", fg_color="transparent")
+        label_appearance = CTkLabel(frame_native, text=lang['Settings']['Title theme'], fg_color="transparent")
         label_appearance.grid(row=1, column=0)
 
         optionmenu_lang_var = StringVar(value=settings['language']['user_language'])
@@ -75,12 +77,12 @@ def Create_Settings_Menu_Window(label):
         optionmenu_lang.grid(row=0, column=1, padx=(10, 0))
 
         optionmenu_theme_var = StringVar(value=lang['default_theme'])
-        optionmenu_theme = CTkOptionMenu(frame_native, variable=optionmenu_theme_var, values=list(lang['AppearanceApp'].values()))
+        optionmenu_theme = CTkOptionMenu(frame_native, variable=optionmenu_theme_var, values=list(lang['AppearanceApp'].values()), command=lambda var: Additional.optionmenu_themes_callback(var))
         optionmenu_theme.grid(row=1, column=1, padx=(10, 0))
 
 
         
-        save_btn = CTkButton(frame_native, text=lang['Buttons']['SettingBtnSave'], command=lambda: Additional.optionmenu_lang_callback(settings, optionmenu_lang_var.get()))
+        save_btn = CTkButton(frame_native, text=lang['Buttons']['SettingBtnSave'], command=lambda: Additional.save_sets(optionmenu_lang_var.get(),optionmenu_theme_var.get()))
         save_btn.grid(row=2, column=1, padx=(10, 0))
 
 class Additional():
@@ -88,10 +90,26 @@ class Additional():
         article_text_area.delete(1.0, END)
         article_text_area.insert(END, article)
     
-    def optionmenu_lang_callback(settings, var):
-        settings['language']['user_language'] = var
+    def save_sets(var_lang, var_theme):
+        settings['language']['user_language'] = var_lang
+        lang['default_theme'] = var_theme
         with open('settings.json', 'w', encoding='utf-8') as file:
             dump(settings, file, ensure_ascii=False, indent=4)
+        with open('lang_ru.json', 'w', encoding='utf-8') as file:
+            dump(lang, file, ensure_ascii=False, indent=4)
+        messagebox.showinfo(lang['Settings']['Restart']['Title'],lang['Settings']['Restart']['Text'])
+
+    def optionmenu_themes_callback(var):
+        if var == lang['AppearanceApp']['Light']:
+            set_appearance_mode('light')
+        elif var == lang['AppearanceApp']['Dark']:
+            set_appearance_mode('dark')
+        elif var == lang['AppearanceApp']['Bern']:
+            set_appearance_mode('dark')
+            set_default_color_theme("bern_app.json") 
+        elif var == lang['AppearanceApp']['Lambda']:
+            set_appearance_mode('light')
+            set_default_color_theme("lambda_app.json") 
 
 
 

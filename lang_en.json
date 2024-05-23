@@ -1,0 +1,136 @@
+{
+    "Title": "Loan Calculator",
+    "Header": {
+        "Menu": [
+            "File",
+            "Edit",
+            "Tools",
+            "Help"
+        ],
+        "File": [
+            "New Calculation",
+            "Open",
+            "Save",
+            "Save As...",
+            "Import",
+            "Export",
+            "Exit"
+        ],
+        "Edit": [
+            "Undo",
+            "Redo",
+            "Settings"
+        ],
+        "Tools": [
+            "Currency Converter",
+            "Deposit Calculator"
+        ],
+        "Help": [
+            "Help",
+            "About"
+        ]
+    },
+    "Currencies": [
+        "₽",
+        "€",
+        "$",
+        "¥"
+    ],
+    "Period_units": [
+        "years",
+        "months",
+        "days"
+    ],
+    "Rate_per_units": [
+        "% per year",
+        "% per month",
+        "% per day"
+    ],
+    "LabelsForMainEntries": [
+        "Loan Amount:",
+        "Loan Term:",
+        "Interest Rate:"
+    ],
+    "LabelForTypeDebt": "Select Loan Type:",
+    "TypesDebt": [
+        "annuity",
+        "differentiated"
+    ],
+    "LabelsForAdditionalEntries": [
+        "Down Payment:",
+        "One-time Fee:",
+        "Monthly Fee:"
+    ],
+    "DateEntry": {
+        "labeldate": "Start Date: ",
+        "locale": "ru_RU"
+    },
+    "CombosForAdditionalEntries": [
+        "units",
+        "% of loan amount"
+    ],
+    "Buttons": {
+        "mainExecute": "Calculate",
+        "SettingBtnSave": "Save"
+    },
+    "MainResults": {
+        "monthly_payment": "Monthly Payment: ",
+        "From": "from",
+        "To": "to",
+        "total_payment": "Total Payment: ",
+        "overpayment": "Overpayment: ",
+        "overpayment_percantage": "Overpayment Percentage: "
+    },
+    "About_us_Text": {
+        "Name": "CTk Loan Calculator",
+        "Version": "1.1.0",
+        "Object": "A convenient tool for calculating loan payments and total cost",
+        "License": "THIS SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+        "Github": "https://github.com/lambdaD",
+        "Thanks": "Thanks to Tom Schimansky (https://github.com/TomSchimansky) for providing the modern library for building GUI in Python"
+    },
+    "Help_Text": {
+        "Loan": {
+            "Header": "Loan Calculator",
+            "Article": "The loan calculator (bank loan calculator) is used for online calculation of the payment amount, overpayment, real interest rate or total loan cost, which should be disclosed by both SberBank and other commercial banks. You can also find out which part of the payments goes towards the repayment of the principal loan amount and which part goes towards the repayment of the loan interest. This loan calculator allows online calculation for two types of payments: annuity payment - this is an equal monthly loan payment, which includes the amount of accrued interest on the bank loan and the principal amount, used in most commercial banks; differentiated payment - this is a monthly payment that decreases towards the end of the loan term, consisting of a constant part of the principal and interest on the outstanding loan balance, often used by SberBank. The loan calculator is used to compare different types of loans and obtain the necessary information without the help of bank specialists."
+        },
+        "Loan Calculation": {
+            "Header": "Online Loan Calculation",
+            "Article": "You can take a loan in any of the banks, whether it is a consumer loan, mortgage, or cash loan — in any case, you will need a loan calculator. Its accuracy will be sufficient to compare offers from different banks. As a result, you will have information about:\nThe size of the monthly payment;\nThe amount of accrued interest;\nThe monthly payment schedule.\nThe total cost of the loan."
+        },
+        "Loan Rate": {
+            "Header": "Loan Interest Rate",
+            "Article": "The interest rate is the most important criterion that should be evaluated before taking a loan. The unit of measurement for the loan rate is the annual percentage rate. It shows the amount of interest accrued on the debt for one year. In fact, the annual rate is divided into 365 days and accrued daily. Each bank has its own principles for issuing loans, as well as interest rates.\nFactors influencing the formation of the loan rate: \nCentral Bank of Russia key rate. The bank lends you not its own money, but the money it borrowed from the central bank at the key rate. To make a profit, the bank adds additional percentages to the key rate. The lower the key rate, the more advantageous it is to take a loan, as the overpayment will be less. Central Bank meetings are regularly held, during which the key rate is adjusted. It can increase or decrease depending on the economic situation in the country on the world stage.\nLoan type. The less the bank is confident in the reliability of the loan, the more you will have to overpay for it. For example, mortgage rates are much lower than consumer loan rates because in this case, the bank has the purchased property as collateral. In other cases, the bank has few guarantees that the borrower will consistently repay the loan, so the interest rate is higher.\nBorrower characteristics. First of all, this includes the credit history and quality of your interactions with a specific bank. Bank employees will certainly evaluate the borrower's credit history to make a decision on both the fact of issuing a loan and the interest rate. The better the history, the lower the interest rates. Payroll clients of the bank have the opportunity to receive a discount of 0.3 to 0.6 percent."
+        }
+    },
+    "Error Messages": {
+        "Value Error": {
+            "Title": "Data Error",
+            "Text": "Enter valid data in the fields"
+        }
+    },
+    "ScheduleTable": {
+        "Title": "Schedule Table",
+        "Num": "№",
+        "Date": "Payment Date",
+        "Payment": "Payment Amount",
+        "Principal": "Principal",
+        "Interest": "Interest",
+        "Balance": "Balance"
+    },
+    "AppearanceApp": {
+        "Light": "Light",
+        "Dark": "Dark",
+        "Bern": "Bern",
+        "Lambda": "Lambda"
+    },
+    "default_theme": "Light",
+    "Settings": {
+        "Title Lang": "Language:",
+        "Title theme": "Theme:",
+        "Restart": {
+            "Title": "Restart",
+            "Text": "Restart the application to save settings"
+        }
+    }
+}

@@ -1,13 +1,14 @@
 from tkinter import *
 from tkinter import ttk
-from iflang import changeLanguage
+from iflang import *
 
-lang = changeLanguage('Ru')
+settings = include_settings()
+lang = changeLanguage(settings['language']['user_language'])
 
 # Функция для создания плана выплат (окно)
 def create_new_tab_windowSchedulePayments(payments):
     windowSchedulePayments = Toplevel()
-    windowSchedulePayments.title("План платежей")
+    windowSchedulePayments.title(lang['ScheduleTable']['Title'])
 
     # Определяем столбцы
     columns = [lang['ScheduleTable']['Num'], 

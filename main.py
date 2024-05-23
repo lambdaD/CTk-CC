@@ -208,9 +208,9 @@ def Create_Additional_Parameters():
     date_entry = DateEntry(frame, year=first_day_next_month.year, month=first_day_next_month.month,day=first_day_next_month.day, font = ('Century Gothic', 17), locale= lang['DateEntry']['locale'], state = 'readonly')
     date_entry.grid(column = 1, row = 0, sticky = W, pady = (0, 10), padx = (10, 0))
 
-    add_parametrs_combo = StringVar(value = 'у.е.')
+    add_parametrs_combo = StringVar(value = lang['CombosForAdditionalEntries'][0])
     # Фрейм, массив энтрей, массив слайдеров
-    add_entries, add_entries_values, add_sliders = Create_Main_Entries_Frame(lang["LabelsForAdditionalEntries"], [[add_parametrs_combo.get(),'% от суммы кредита'], [add_parametrs_combo.get(),'% от суммы кредита'], [add_parametrs_combo.get(),'% от суммы кредита']], [add_parametrs_combo, add_parametrs_combo, add_parametrs_combo], frame, 10, 170, 100, [100000, 30000, 30000])
+    add_entries, add_entries_values, add_sliders = Create_Main_Entries_Frame(lang["LabelsForAdditionalEntries"], [[add_parametrs_combo.get(),lang['CombosForAdditionalEntries'][1]], [add_parametrs_combo.get(),lang['CombosForAdditionalEntries'][1]], [add_parametrs_combo.get(),lang['CombosForAdditionalEntries'][1]]], [add_parametrs_combo, add_parametrs_combo, add_parametrs_combo], frame, 10, 170, 100, [100000, 30000, 30000])
     add_entries.grid(column = 0, row = 1, columnspan = 2)
     return frame, add_entries_values, date_entry
 
@@ -237,11 +237,11 @@ root = CTk()
 root.geometry('550x650')
 root.minsize(550, 650)
 root.maxsize(1050, 650)
-lang = changeLanguage('Ru')
+settings = include_settings()
+lang = changeLanguage(settings['language']['user_language'])
 root.title(lang['Title'])
 root.iconbitmap(default="ico/usd.ico")
-set_appearance_mode("light")
-set_default_color_theme("yellow-black.json") 
+Additional.optionmenu_themes_callback('Берн') 
 #------------------------Main entries units------------------------#
 currencies = lang['Currencies']
 period_units = lang['Period_units']
