@@ -1,6 +1,11 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 from iflang import *
+import pandas as pd
+
+
+
 
 
 
@@ -29,6 +34,20 @@ def create_new_tab_windowSchedulePayments(payments):
     tableSchedulePayments.pack(fill='both', expand=True)
     for payment in payments:
         tableSchedulePayments.insert('', 'end', values=payment)
+    export_button = Button(windowSchedulePayments, text='Экспорт', command=lambda: export_to_excel(tableSchedulePayments))
+    export_button.pack(pady=10)
 
 
-
+def export_to_excel(tree):
+    try:
+        rows = []
+        for row_id in tree.get_children():
+            row = tree.item(row_id)['values']
+            rows.append(row)
+        columns = [tree.heading(col)['text'] for col in tree['columns']]
+        df = pd.DataFrame(rows, columns=columns)
+        file_path = 'schedule_payments.xlsx'
+        df.to_excel(file_path, index=False)
+        messagebox.showinfo('Ok', 'Ok')
+    except Exception as e:
+        messagebox.showerror('Not ok', 'not ok')
